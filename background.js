@@ -1,14 +1,40 @@
-// Listen for a message from the popup script
-chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
-  // Use the received color to change the background color of the current page
-  chrome.scripting.executeScript({
-    target: { tabId: sender.tab.id },
-    function: setBackgroundColor,
-    args: [request.color],
-  });
-});
+chrome.webRequest.onBeforeRequest.addListener(
+  function (details) {
+    // Check if it's the request we're interested in
+    if (
+      details.method === "POST" &&
+      details.url === "https://chat.openai.com/backend-api/conversation"
+    ) {
+      // Decode the request body
+      let decoder = new TextDecoder();
+      let bodyData = JSON.parse(
+        decoder.decode(details.requestBody.raw[0].bytes)
+      );
 
-// This function is serialised and executed in the context of the current page
-function setBackgroundColor(color) {
-  document.body.style.backgroundColor = color;
-}
+      // Modify the request body
+      if (bodyData.messages && bodyData.messages[0].content.parts) {
+        bodyData.messages[0].content.parts =
+          bodyData.messages[0].content.parts.map((part) => "PREFIX_" + part);
+        console.log(bodyData.messages[0].content.parts);
+        C;
+      }
+
+      // Re-encode the modified bodyData into a string
+      let encoder = new TextEncoder();
+      let newBodyDataStr = encoder.encode(JSON.stringify(bodyData));
+
+      // Return modified request
+      return {
+        requestBody: {
+          raw: [
+            {
+              bytes: newBodyDataStr,
+            },
+          ],
+        },
+      };
+    }
+  },
+  { urls: ["<all_urls>"] },
+  ["blocking", "requestBody"]
+);

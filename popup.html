@@ -1,15 +1,20 @@
 <!DOCTYPE html>
 <html>
 <head>
-  <link rel="stylesheet" type="text/css" href="styles.css">
+  <style>
+    body {
+      width: 300px;
+      font-family: Arial, sans-serif;
+      text-align: center;
+    }
+    #scraped-chat {
+      margin-top: 20px;
+    }
+  </style>
 </head>
 <body>
-  <h1>Background Color Changer</h1>
-  <div>
-    <label for="color">Select a color:</label>
-    <input type="color" id="color-picker" name="color">
-  </div>
-  <button id="toggle-button">Toggle Color</button>
+  <button id="scrape-button">Scrape Text</button>
+  <div id="scraped-chat"></div>
   <script src="popup.js"></script>
 </body>
 </html>
