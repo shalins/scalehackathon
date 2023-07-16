@@ -3,7 +3,13 @@
   "name": "ChatGPT Scraper",
   "version": "1.0",
   "description": "Scrape the content from ChatGPT",
-  "permissions": ["activeTab", "scripting", "webRequestBlocking", "webRequest"],
+  "permissions": ["activeTab", "scripting", "webRequestBlocking", "webRequest", "storage"],
+	"content_scripts": [
+		{
+			"matches": ["https://chat.openai.com/*", "https://www.chat.openai.com/*"],
+			"js": ["content.js"]
+		}
+	],
   "action": {
     "default_popup": "popup.html",
     "default_icon": {
@@ -11,8 +17,8 @@
       "48": "images/icon32.png",
       "128": "images/icon128.png"
     },
-			"background": {
-		"scripts": ["background.js"],
+		"background": {
+			"scripts": ["background.js"],
 			"persistent": true
 		}
   },

@@ -18,8 +18,7 @@ document.getElementById("scrape-button").addEventListener("click", () => {
 });
 
 function extractChat() {
-  const chatElement = document.querySelector(
-    ".markdown.prose.w-full.break-words.dark\\:prose-invert.dark"
-  );
-  return chatElement ? chatElement.textContent : null;
+  let selector = ".flex.flex-col.text-sm.dark\\:bg-gray-800";
+  let element = document.querySelector(selector);
+  return element ? element.textContent : null;
 }
