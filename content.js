@@ -13,7 +13,22 @@ function changePage() {
   submitButton.addEventListener("click", function (e) {
     let currentText = textBox.value;
     list_of_inputs.push(textBox.value);
-    var history1 = localStorage.getItem("history1");
+    var history1 = `
+javascript
+app.get('/users/filter', (req, res) => {
+  const emailDomain = req.query.domain;
+  const domainRegex = new RegExp(\`^.* @\${ emailDomain }$\`);
+  const filter = { email: { $regex: domainRegex } };
+
+  db.collection('users').find(filter).toArray((err, users) => {
+    if (err) {
+      return res.status(500).json({ error: 'Internal Server Error' });
+    }
+
+    res.json(users);
+  });
+});
+    `;
     //var history2 = localStorage.getItem("history2");
     currentText += "\n" + history1; //+ "\n" + history2;
     console.log(currentText);
@@ -22,13 +37,19 @@ function changePage() {
 
   if (window.location.href.match(chatPagePattern)) {
     setInterval(() => {
+      if (document.getElementsByClassName("empty:hidden")) {
+        if (submit) {
+          return;
+        }
+      submit = true
       let num_of_inputs = list_of_inputs.length;
       let total_chats = document.getElementsByClassName("empty:hidden").length;
       for (let i = 0; i < num_of_inputs; i++) {
         document.getElementsByClassName("empty:hidden")[total_chats - i - 1].setHTML(list_of_inputs[num_of_inputs - i - 1]);
       }
-    }, 100);
-    
+    }
+    }, 1000);
+
     setInterval(function () {
 
 
